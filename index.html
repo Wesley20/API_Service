@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <title>Meu Aplicativo Node.js</title>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <!-- Inclua a AWS SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1048.0/aws-sdk.min.js"></script>
+
+    <style>
+        /* Reset CSS */
+        html,
+        body,
+        div,
+        span,
+        applet,
+        object,
+        iframe,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        blockquote,
+        pre,
+        a,
+        abbr,
+        acronym,
+        address,
+        big,
+        cite,
+        code,
+        del,
+        dfn,
+        em,
+        img,
+        ins,
+        kbd,
+        q,
+        s,
+        samp,
+        small,
+        strike,
+        strong,
+        sub,
+        sup,
+        tt,
+        var,
+        b,
+        u,
+        i,
+        center,
+        dl,
+        dt,
+        dd,
+        ol,
+        ul,
+        li,
+        fieldset,
+        form,
+        label,
+        legend,
+        table,
+        caption,
+        tbody,
+        tfoot,
+        thead,
+        tr,
+        th,
+        td {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+        }
+
+        body {
+            background-color: rgb(020, 020, 030);
+            color: #ffffff;
+
+            .container {
+                padding: 10px;
+
+                .titulo {
+                    text-align: center;
+                    font-size: 14pt;
+                    margin: 20px 0 40px 0;
+                }
+
+                .caixa {
+                    width: 70%;
+                    margin: auto;
+                    -webkit-box-shadow: 0px 0px 5px 1px rgba(10, 100, 255, 1);
+                    -moz-box-shadow: 0px 0px 5px 1px rgba(10, 100, 255, 1);
+                    box-shadow: 0px 0px 5px 1px rgba(10, 100, 255, 1);
+                    background-color: #1b1b20;
+
+                    .subtitulo {
+                        text-align: center;
+                        padding: 10px 0;
+                    }
+
+                    .subcaixa {
+                        display: flex;
+                    }
+                }
+
+                .caixaInterna {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 50%;
+                    padding: 5px;
+                    align-items: flex-start;
+                }
+
+                .resposta1,
+                .resposta2 {
+                    height: 18px;
+                    font-size: 10pt;
+                }
+
+                .paragrafo {
+                    font-size: 9pt;
+                    margin: 8px 0;
+                    text-align: start;
+                }
+            }
+
+            .caixaInterna:first-child {
+                text-align: center;
+                align-items: center;
+            }
+
+
+
+            .inputtexto,
+            .inputemail,
+            .inputcel {
+                width: 70%;
+                margin: 8px 2px;
+                padding: 2px;
+                background-color: rgb(42, 42, 42);
+                color: #ffffff;
+                -webkit-box-shadow: 0px 0px 5px 1px rgba(10, 100, 255, 1);
+                -moz-box-shadow: 0px 0px 5px 1px rgba(10, 100, 255, 1);
+                box-shadow: 0px 0px 5px 1px rgba(10, 100, 255, 1);
+                border: none;
+                border-radius: 3px;
+            }
+
+            .inputtexto:focus,
+            .inputemail:focus,
+            .inputcel:focus {
+                outline: none;
+            }
+
+            .cadastrocliente {
+                margin: 8px 2px;
+                padding: 5px;
+                background-color: rgba(0, 0, 42, 0);
+                color: #ffffff;
+                border-radius: 5px;
+                border: 1px solid rgb(0, 0, 42);
+                transition: background-color 0.5s ease;
+            }
+
+            .cadastrocliente:hover {
+                cursor: pointer;
+                background-color: rgba(0, 0, 195, 0.2);
+            }
+
+            .cadastrocliente:active {
+                background-color: rgb(0, 0, 42);
+            }
+
+            #sucesso {
+                background-color: rgb(0, 80, 0);
+            }
+
+            #atencao {
+                background-color: rgb(80, 80, 0);
+            }
+
+            #erro {
+                background-color: rgb(80, 0, 0);
+            }
+
+            .teta {
+                font-size: 25pt;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <video autoplay muted loop id="video-background">
+        <source src="/background.mp4" type="video/mp4">
+    </video>
+
+    <!-- Primeira divisão -->
+    <div id='email' class="container">
+        <h1 class="titulo" id="umBotao">Instrucao de uso da API</h1>
+        <div class="caixa">
+            <h2 class="subtitulo">API para cadastro de e-mails</h2>
+            <div class="subcaixa">
+                <div class="caixaInterna">
+
+                    <input type="email" class="inputemail" placeholder="Digite o e-mail teste aqui!">
+                    <textarea type="text" class="inputtexto" rows="3" placeholder="Digite o assunto aqui!"></textarea>
+                    <button id="cadastro_email" class="cadastrocliente email" value='email'>
+                        Cadastrar
+                    </button>
+                    <p class="resposta1"></p>
+                    <p class="resposta1"></p>
+                    <p class="resposta1"></p>
+
+                </div>
+                <div class="caixaInterna">
+                    <p class="paragrafo">
+                        Para adicionar a função de cadastro
+                        é preciso usar o caminho http://127.0.0.1:3000/cadastro/email
+                        o envio de email é obrigatório.
+                    </p>
+                    <p class="paragrafo">
+                        *O envio de assunto é opcional.
+                    </p>
+                    <p class="paragrafo">
+                        Para verificar o funcionamento da função cadastrar da API
+                        digite o e-mail e assunto* e clique em cadastrar
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Segunda divisão -->
+    <div id='cel' class="container">
+        <div class="caixa">
+            <h2 class="subtitulo">API para cadastro de SMS</h2>
+            <div class="subcaixa">
+                <div class="caixaInterna">
+
+                    <input type="cel" class="inputcel" placeholder="Digite o celular aqui!">
+                    <textarea type="text" class="inputtexto" rows="3" placeholder="Digite o assunto aqui!"></textarea>
+                    <button id="cadastro_celular" class="cadastrocliente celular" value='cel'>
+                        Cadastrar celular
+                    </button>
+                    <p class="resposta2"></p>
+                    <p class="resposta2"></p>
+                    <p class="resposta2"></p>
+
+                </div>
+                <div class="caixaInterna">
+                    <p class="paragrafo">
+                        Para adicionar a função de cadastro
+                        é preciso usar o caminho http://127.0.0.1:3000/cadastro/sms
+                        o envio de email é obrigatório.
+                    </p>
+                    <p class="paragrafo">
+                        *O envio de assunto é opcional.
+                    </p>
+                    <p class="paragrafo">
+                        Para verificar o funcionamento da função cadastrar da API
+                        digite o e-mail e assunto* e clique em cadastrar
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!--Fim do html começo das funções javascript-->
+    <script>
+
+        function isValidEmail(email) {
+            // Expressão regular para verificar se é um email válido
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            return emailRegex.test(email);
+        }
+
+        function reseta(e) {
+            let emailInput = document.querySelector('.inputemail');
+            let textoInput = document.querySelector('.inputtexto');
+            emailInput.value = '';
+            textoInput.value = '';
+
+            let resposta1 = document.querySelectorAll('.resposta1');
+            let resposta2 = document.querySelectorAll('.resposta2');
+
+            if (e === 'email') {
+                setTimeout(() => {
+                    resposta1[0].innerText = "";
+                    resposta1[0].id = '';
+                    resposta1[1].innerText = "";
+                    resposta1[1].id = '';
+                    resposta1[2].innerText = '';
+                    resposta1[2].id = '';
+                }, 5000)
+            } else if (e === 'cel') {
+                setTimeout(() => {
+                    resposta2[0].innerText = "";
+                    resposta2[0].id = '';
+                    resposta2[1].innerText = "";
+                    resposta2[1].id = '';
+                    resposta2[2].innerText = '';
+                    resposta2[2].id = '';
+                }, 5000)
+            }
+
+        }
+
+        function cadastroContato(e) {
+
+            // console.log(e.target.value);
+
+            var celularInput = document.querySelector(".inputcel");
+            var emailInput = document.querySelector('.inputemail');
+            var textoInput = document.querySelector('.inputtexto');
+            var cadastro_email = document.querySelector('#cadastro_email');
+            var cadastro_celular = document.querySelector('#cadastro_celular');
+            var resposta1 = document.querySelectorAll('.resposta1');
+            var resposta2 = document.querySelectorAll('.resposta2');
+
+            var email = emailInput.value;
+            var cel = celularInput.value;
+            var texto = textoInput.value;
+
+            if (e.target.value === 'email') {
+                if (email === '') {
+                    resposta1[0].innerText = "";
+                    resposta1[0].id = '';
+                    resposta1[1].innerText = "E-mail não pode ficar em branco.";
+                    resposta1[1].id = 'erro';
+                    resposta1[2].innerText = '';
+                    resposta1[2].id = '';
+                    reseta(e.target.value);
+                    return;
+                } else if (!isValidEmail(email)) {
+                    resposta1[0].innerText = "";
+                    resposta1[0].id = '';
+                    resposta1[1].innerText = "O e-mais está incorreto";
+                    resposta1[1].id = 'atencao';
+                    resposta1[2].innerText = email;
+                    resposta1[2].id = 'atencao';
+                    reseta(e.target.value);
+                    return;
+                }
+            } else if (e.target.value === 'cel') {
+                if (cel === '') {
+                    resposta2[0].innerText = "";
+                    resposta2[0].id = '';
+                    resposta2[1].innerText = "Celular não pode ficar em branco.";
+                    resposta2[1].id = 'erro';
+                    resposta2[2].innerText = '';
+                    resposta2[2].id = '';
+                    reseta(e.target.value);
+                    return;
+                }
+            }
+
+
+
+            const data = {
+                email: email,
+                assunto: texto
+            };
+
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+
+            fetch('http://127.0.0.1:3000/cadastro/email', requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Resposta do servidor', data);
+                    if (data.mensagemAssunto) {
+                        resposta1[0].innerHTML = `${data.mensagem}`
+                        resposta1[1].innerHTML = `${data.mensagemDetalhe}`
+                        resposta1[2].innerHTML = `assunto: ${data.mensagemAssunto}`
+                        resposta1[0].id = data.status === 'success' ? 'sucesso' : 'erro';
+                        resposta1[1].id = data.status === 'success' ? 'sucesso' : 'erro';
+                        resposta1[2].id = data.status === 'success' ? 'sucesso' : 'erro';
+                        reseta();
+                    } else {
+                        resposta1[0].innerHTML = `${data.mensagem}`
+                        resposta1[1].innerHTML = `${data.mensagemDetalhe}`
+                        resposta1[2].innerHTML = `sem assunto`
+                        resposta1[0].id = data.status === 'success' ? 'sucesso' : 'erro';
+                        resposta1[1].id = data.status === 'success' ? 'sucesso' : 'erro';
+                        resposta1[2].id = data.status === 'success' ? 'sucesso' : 'erro';
+                        reseta();
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Erro na requisição', error);
+                })
+        }
+
+        function cadastroCel() {
+            // Importe o SDK AWS, se estiver usando Node.js
+            // const AWS = require('aws-sdk');
+
+            // Configure as credenciais da AWS (substitua com suas próprias credenciais)
+            AWS.config.update({
+                accessKeyId: 'AKIAV7Q4XICDHDMU53PO',
+                secretAccessKey: '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',
+                region: 'sa-east-1' // Substitua pela região correta
+            });
+
+            // Crie um novo objeto SNS
+            const sns = new AWS.SNS();
+
+            // Defina os parâmetros da mensagem SMS
+            const params = {
+                Message: 'Sua mensagem aqui',
+                PhoneNumber: '+5516988717770' // Substitua pelo número de telefone de destino
+            };
+
+            // Envie a mensagem SMS
+            sns.publish(params, (err, data) => {
+                if (err) {
+                    console.error('Erro ao enviar a mensagem SMS:', err);
+                } else {
+                    console.log('Mensagem SMS enviada com sucesso:', data.MessageId);
+                }
+            });
+
+        }
+
+        document.getElementById('cadastro_email').addEventListener('click', cadastroContato);
+        document.getElementById('cadastro_celular').addEventListener('click', cadastroContato);
+    </script>
+</body>
+
+</html>
