@@ -1,5 +1,5 @@
 {
-  "name": "API_Service",
+  "name": "api_service",
   "version": "1.0.0",
   "description": "Back-end para cadastro de e-mails envio de SMSs e outros",
   "main": "app.js",
