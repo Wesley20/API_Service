@@ -237,7 +237,7 @@
                 <div class="caixaInterna">
                     <p class="paragrafo">
                         Para adicionar a função de cadastro
-                        é preciso usar o caminho http://127.0.0.1:3000/cadastro/email
+                        é preciso usar o caminho http://localhost:3000/cadastro/email
                         o envio de email é obrigatório.
                     </p>
                     <p class="paragrafo">
@@ -274,7 +274,7 @@
                 <div class="caixaInterna">
                     <p class="paragrafo">
                         Para adicionar a função de cadastro
-                        é preciso usar o caminho http://127.0.0.1:3000/cadastro/sms
+                        é preciso usar o caminho http://localhost:3000/cadastro/sms
                         o envio de email é obrigatório.
                     </p>
                     <p class="paragrafo">
@@ -395,7 +395,7 @@
                 body: JSON.stringify(data)
             }
 
-            fetch('http://127.0.0.1:3000/cadastro/email', requestOptions)
+            fetch('http://localhost:3000/cadastro/email', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Resposta do servidor', data);

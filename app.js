@@ -3,8 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const hostname = 'localhost';
+
+const port = process.env.PORT || 3000;
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',

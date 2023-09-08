@@ -1,10 +1,14 @@
 {
-  "name": "cadastro_email",
+  "name": "API_Service",
   "version": "1.0.0",
-  "description": "Back-end para cadastro de e-mails",
+  "description": "Back-end para cadastro de e-mails envio de SMSs e outros",
   "main": "app.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Wesley Costa",
