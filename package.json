@@ -17,5 +17,17 @@
     "@vercel/node": "^3.0.3",
     "aws-sdk": "^2.1450.0",
     "nodemailer": "^6.9.4"
-  }
+  },
+    "builds": [
+        {
+            "src": "./app.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/"
+        }
+    ]
 }
