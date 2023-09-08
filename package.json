@@ -4,7 +4,7 @@
   "description": "Back-end para cadastro de e-mails envio de SMSs e outros",
   "main": "app.js",
   "engines": {
-    "node": "14.x"
+    "node": "18.x"
   },
   "scripts": {
     "start": "node app.js",
@@ -14,6 +14,7 @@
   "author": "Wesley Costa",
   "license": "ISC",
   "dependencies": {
+    "@vercel/node": "^3.0.3",
     "aws-sdk": "^2.1450.0",
     "nodemailer": "^6.9.4"
   }
